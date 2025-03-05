@@ -1,52 +1,77 @@
 import 'package:flutter/material.dart';
-
 import 'colors.dart';
 
 class AppTheme {
   static ThemeData themeData() {
     return ThemeData(
-      primaryColor: Colors.grey[700],
-      scaffoldBackgroundColor: Colors.grey[100],
-      appBarTheme: AppBarTheme(
-        color: Colors.grey[700],
-      ),
-      cardTheme: CardTheme(
-        color: Colors.grey[200],
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+      brightness: Brightness.dark,
+      primaryColor: AppColors.blue,
+      scaffoldBackgroundColor: AppColors.black,
+      appBarTheme: const AppBarTheme(
+        color: AppColors.black,
+        titleTextStyle: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: AppColors.white,
         ),
       ),
-      textTheme: TextTheme(
-        headlineSmall: const TextStyle(
+      cardTheme: CardTheme(
+        color: AppColors.grayDark,
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      textTheme: const TextTheme(
+        headlineSmall: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
-          color: Colors.black,
+          color: AppColors.white,
         ),
         titleLarge: TextStyle(
           fontSize: 16,
-          color: Colors.grey[600],
+          color: AppColors.grayLight,
+        ),
+        bodyLarge: TextStyle(
+          fontSize: 14,
+          color: AppColors.white,
+        ),
+        bodyMedium: TextStyle(
+          fontSize: 14,
+          color: AppColors.grayLight,
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+          backgroundColor: WidgetStateProperty.all<Color>(AppColors.blue),
+          foregroundColor: WidgetStateProperty.all<Color>(AppColors.white),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+          foregroundColor: WidgetStateProperty.all<Color>(AppColors.blue),
+        ),
+      ),
+      inputDecorationTheme: const InputDecorationTheme(
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: AppColors.grayLight,
+            width: 1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: AppColors.blue,
+            width: 2,
+          ),
+        ),
+        hintStyle: TextStyle(
+          color: AppColors.grayLight,
+        ),
+        labelStyle: TextStyle(
+          color: AppColors.white,
         ),
       ),
     );
   }
 }
-
-const inputDecorationTheme = InputDecorationTheme(
-  enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide(
-      color: onBackgroundColor,
-      width: 1,
-    ),
-  ),
-);

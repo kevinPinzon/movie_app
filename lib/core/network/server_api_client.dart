@@ -97,7 +97,7 @@ class ServerApiClient {
 
   String _formatResponseLog(http.Response response, {Object? requestBody}) {
     final time = DateTime.now().toUtc().toIso8601String();
-    final encoder = const JsonEncoder.withIndent('  ');
+    const encoder = JsonEncoder.withIndent('  ');
     final formattedRequestBody =
         requestBody != null ? encoder.convert(requestBody) : '';
     final formattedBodyJson = _tryDecodeJson(response.body, encoder);
