@@ -2,17 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:movie_app/core/routes/navigation.dart';
+import 'package:movie_app/core/theme/theme.dart';
 import 'package:movie_app/feature/movies/data/repositories/movie_repository.dart';
 import 'package:movie_app/feature/movies/domain/repositories/movie_repository.dart';
 import 'package:movie_app/feature/movies/presentation/blocs/movie_bloc.dart';
 import 'package:movie_app/core/network/server_api_client.dart';
 import 'package:http/http.dart' as http;
 import 'package:movie_app/core/network/network_info.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 final GetIt getIt = GetIt.instance;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load(fileName: "assets/.env");
 
   getIt
     ..registerLazySingleton(() => http.Client())
@@ -44,6 +48,7 @@ class App extends StatelessWidget {
         ),
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
+          theme: AppTheme.themeData(), // Aplicar el tema oscuro
           routerConfig: _appRouter.router,
         ),
       ),

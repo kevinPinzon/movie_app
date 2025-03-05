@@ -25,7 +25,9 @@ dependencies:
   cached_network_image: ^3.4.0
   connectivity_plus: ^3.0.3
   get_it: ^7.2.0
-  
+  flutter_dotenv: ^5.1.0
+  intl: ^0.17.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -38,7 +40,8 @@ flutter:
   assets:
     - assets/lotties/
     - assets/images/
-
+    - assets/.env
+    
   fonts:
   - family: Montserrat
     fonts:

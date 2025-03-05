@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:movie_app/core/network/server_api_client.dart';
 import 'package:movie_app/feature/movies/domain/repositories/movie_repository.dart';
 import 'package:movie_app/feature/movies/domain/entities/movie_entity.dart';
@@ -19,10 +20,12 @@ class MovieRepositoryImpl implements MovieRepository {
     const queryParameters = {'page': '1'};
 
     try {
+      final authToken = dotenv.env['AUTH_TOKEN'] ?? '';
+
       final headers = <String, String>{
         'accept': 'application/json',
       };
-      headers['Authorization'] = 'Bearer toekn';
+      headers['Authorization'] = 'Bearer $authToken';
 
       final response = await serverApiClient.get(
         path,
@@ -38,6 +41,7 @@ class MovieRepositoryImpl implements MovieRepository {
                 id: movieJson['id'],
                 title: movieJson['title'],
                 overview: movieJson['overview'],
+                releaseDate: movieJson['release_date'],
                 posterPath: movieJson['poster_path'],
                 voteAverage: movieJson['vote_average'].toDouble(),
               ))
