@@ -15,9 +15,9 @@ class MovieRepositoryImpl implements MovieRepository {
   });
 
   @override
-  Future<List<MovieEntity>> fetchMovies() async {
+  Future<List<MovieEntity>> fetchMovies(int page) async {
     const path = '/3/discover/movie';
-    const queryParameters = {'page': '1'};
+    final queryParameters = {'page': page.toString()};
 
     try {
       final authToken = dotenv.env['AUTH_TOKEN'] ?? '';

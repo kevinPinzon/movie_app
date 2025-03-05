@@ -9,3 +9,8 @@ class FetchMovies extends MovieEvent {
   @override
   List<Object?> get props => [];
 }
+
+class LoadMoreMovies extends MovieEvent {
+  @override
+  List<Object?> get props => [];
+}

@@ -10,7 +10,9 @@ class MovieListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Movie List')),
+      appBar: AppBar(
+        title: const Text('Movie List'),
+      ),
       body: BlocProvider(
         create: (context) => MovieBloc(
           movieRepository: RepositoryProvider.of<MovieRepository>(context),
@@ -21,10 +23,18 @@ class MovieListScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             } else if (state is MovieLoaded) {
               return ListView.builder(
-                itemCount: state.movies.length,
+                itemCount: state.movies.length + 1,
                 itemBuilder: (context, index) {
-                  final movie = state.movies[index];
-                  return MovieItem(movie: movie);
+                  if (index == state.movies.length) {
+                    context.read<MovieBloc>().add(LoadMoreMovies());
+                    return const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  } else {
+                    final movie = state.movies[index];
+                    return MovieItem(movie: movie);
+                  }
                 },
               );
             } else if (state is MovieError) {
