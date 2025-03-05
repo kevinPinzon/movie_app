@@ -10,7 +10,13 @@ class FetchMovies extends MovieEvent {
   List<Object?> get props => [];
 }
 
-class LoadMoreMovies extends MovieEvent {
+class LoadMoreMovies extends MovieEvent {}
+
+class SearchMovies extends MovieEvent {
+  final String query;
+
+  SearchMovies({required this.query});
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [query];
 }

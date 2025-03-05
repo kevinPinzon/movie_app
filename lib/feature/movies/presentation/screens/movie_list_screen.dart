@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/feature/movies/domain/repositories/movie_repository.dart';
 import 'package:movie_app/feature/movies/presentation/blocs/movie_bloc.dart';
+import 'package:movie_app/feature/movies/presentation/widgets/empty_state.dart';
 import 'package:movie_app/feature/movies/presentation/widgets/movie_item.dart';
+import 'package:movie_app/feature/movies/presentation/widgets/movie_search_delegate.dart';
 
 class MovieListScreen extends StatelessWidget {
   const MovieListScreen({super.key});
@@ -12,6 +14,14 @@ class MovieListScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Movie List'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              showSearch(context: context, delegate: MovieSearchDelegate());
+            },
+          ),
+        ],
       ),
       body: BlocProvider(
         create: (context) => MovieBloc(
@@ -40,7 +50,8 @@ class MovieListScreen extends StatelessWidget {
             } else if (state is MovieError) {
               return Center(child: Text(state.message));
             }
-            return const Center(child: Text('No data'));
+
+            return const EmptyState();
           },
         ),
       ),

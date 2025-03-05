@@ -50,5 +50,10 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
         }
       }
     });
+
+    on<SearchMovies>((event, emit) {
+      final filteredMovies = movieRepository.searchMoviesByTitle(event.query);
+      emit(MovieLoaded(movies: filteredMovies));
+    });
   }
 }
