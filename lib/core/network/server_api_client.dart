@@ -18,21 +18,14 @@ class ServerApiClient {
     Object? body,
     Encoding? encoding,
   }) async {
-    final url = Uri(
-      scheme: serverSchemaSecure,
-      host: baseUrl,
-      path: path,
-      queryParameters: queryParameters,
-    );
+    final url = Uri.https(baseUrl, path, queryParameters);
 
-    final allHeaders = headers ?? {};
-    if (!allHeaders.containsKey('Content-Type')) {
-      allHeaders['Content-Type'] = 'application/json';
-      allHeaders['accept'] = 'application/json';
-    }
+    final allHeaders = headers ?? const {};
+    allHeaders.putIfAbsent('Content-Type', () => 'application/json');
+    allHeaders.putIfAbsent('accept', () => 'application/json');
 
     try {
-      http.Response response;
+      late http.Response response;
       switch (method) {
         case 'GET':
           response = await http.get(url, headers: allHeaders);
@@ -57,7 +50,7 @@ class ServerApiClient {
     } catch (e) {
       final check = await networkInfoRepository.hasConnection;
       if (!check) {
-        // Handle network error
+        rethrow;
       }
       rethrow;
     }
@@ -98,29 +91,31 @@ class ServerApiClient {
   Future<T> _processResponse<T>(http.Response response) async {
     if (response.statusCode >= 200 && response.statusCode <= 300) {
       return response as T;
-    } else {
-      // Handle server errors
-      return response as T;
     }
+    return response as T;
   }
 
   String _formatResponseLog(http.Response response, {Object? requestBody}) {
     final time = DateTime.now().toUtc().toIso8601String();
-    JsonEncoder encoder = const JsonEncoder.withIndent('  ');
-    String formattedRequestBody =
+    final encoder = const JsonEncoder.withIndent('  ');
+    final formattedRequestBody =
         requestBody != null ? encoder.convert(requestBody) : '';
-    String formattedBodyJson;
-    try {
-      final json = jsonDecode(response.body);
-      formattedBodyJson = encoder.convert(json);
-    } catch (e) {
-      formattedBodyJson = response.body;
-    }
+    final formattedBodyJson = _tryDecodeJson(response.body, encoder);
+
     return '''
   $time
   Request: ${response.request}${formattedRequestBody.isNotEmpty ? '\n  Request body: $formattedRequestBody' : ''}
   Response code: ${response.statusCode}
   Body: $formattedBodyJson
   ''';
+  }
+
+  String _tryDecodeJson(String body, JsonEncoder encoder) {
+    try {
+      final json = jsonDecode(body);
+      return encoder.convert(json);
+    } catch (e) {
+      return body;
+    }
   }
 }

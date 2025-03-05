@@ -2,7 +2,7 @@
 const String serverSchemaSecure = 'https';
 
 /// Constant to enviroment server autority
-String baseUrl = 'api.themoviedb.org/3/discover/movie?';
+String baseUrl = 'api.themoviedb.org';
 
 /// DEV MOCKS
 const bool requestServer = false;
