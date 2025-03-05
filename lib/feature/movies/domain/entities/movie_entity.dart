@@ -14,4 +14,26 @@ class MovieEntity {
     required this.posterPath,
     required this.voteAverage,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'overview': overview,
+      'releaseDate': releaseDate,
+      'posterPath': posterPath,
+      'voteAverage': voteAverage,
+    };
+  }
+
+  factory MovieEntity.fromMap(Map<String, dynamic> map) {
+    return MovieEntity(
+      id: map['id'],
+      title: map['title'],
+      overview: map['overview'],
+      releaseDate: map['releaseDate'],
+      posterPath: map['posterPath'],
+      voteAverage: map['voteAverage'],
+    );
+  }
 }

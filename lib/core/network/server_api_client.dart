@@ -2,13 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:movie_app/core/network/network_info.dart';
 import 'package:movie_app/core/network/server_info.dart';
 
 class ServerApiClient {
-  final NetworkInfoRepository networkInfoRepository;
-
-  ServerApiClient({required this.networkInfoRepository});
+  ServerApiClient();
 
   Future<http.Response> _request(
     String method, {
@@ -48,10 +45,6 @@ class ServerApiClient {
 
       return _processResponse(response);
     } catch (e) {
-      final check = await networkInfoRepository.hasConnection;
-      if (!check) {
-        rethrow;
-      }
       rethrow;
     }
   }

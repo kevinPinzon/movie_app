@@ -13,13 +13,9 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
 
   MovieBloc({required this.movieRepository}) : super(MovieInitial()) {
     on<FetchMovies>((event, emit) async {
-      if (state is MovieLoading) return;
-
       emit(MovieLoading());
-
       try {
         final movies = await movieRepository.fetchMovies(currentPage);
-
         if (movies.isNotEmpty) {
           currentPage++;
         } else {
@@ -28,7 +24,12 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
 
         emit(MovieLoaded(movies: movies));
       } catch (e) {
-        emit(MovieError(message: e.toString()));
+        final localMovies = await movieRepository.getMoviesFromLocal();
+        if (localMovies.isNotEmpty) {
+          emit(MovieLoaded(movies: localMovies));
+        } else {
+          emit(MovieError(message: 'No movies available.'));
+        }
       }
     });
 
@@ -51,8 +52,9 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       }
     });
 
-    on<SearchMovies>((event, emit) {
-      final filteredMovies = movieRepository.searchMoviesByTitle(event.query);
+    on<SearchMovies>((event, emit) async {
+      final filteredMovies =
+          await movieRepository.searchMoviesByTitle(event.query);
       emit(MovieLoaded(movies: filteredMovies));
     });
   }

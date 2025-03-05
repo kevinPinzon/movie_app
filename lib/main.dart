@@ -8,8 +8,8 @@ import 'package:movie_app/feature/movies/domain/repositories/movie_repository.da
 import 'package:movie_app/feature/movies/presentation/blocs/movie_bloc.dart';
 import 'package:movie_app/core/network/server_api_client.dart';
 import 'package:http/http.dart' as http;
-import 'package:movie_app/core/network/network_info.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:movie_app/core/database/movie_database.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -18,15 +18,16 @@ Future<void> main() async {
 
   await dotenv.load(fileName: "assets/.env");
 
+  final movieDatabase = MovieDatabase();
+  await movieDatabase.init();
+
   getIt
     ..registerLazySingleton(() => http.Client())
-    ..registerLazySingleton<NetworkInfoRepository>(
-        () => NetworkInfoRepositoryImpl())
-    ..registerLazySingleton<ServerApiClient>(
-        () => ServerApiClient(networkInfoRepository: getIt()))
+    ..registerLazySingleton<ServerApiClient>(() => ServerApiClient())
+    ..registerLazySingleton<MovieDatabase>(() => MovieDatabase())
     ..registerLazySingleton<MovieRepository>(() => MovieRepositoryImpl(
           serverApiClient: getIt(),
-          networkInfoRepository: getIt(),
+          movieDatabase: getIt(),
         ))
     ..registerFactory(() => MovieBloc(movieRepository: getIt()));
 
@@ -48,7 +49,7 @@ class App extends StatelessWidget {
         ),
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
-          theme: AppTheme.themeData(), // Aplicar el tema oscuro
+          theme: AppTheme.themeData(),
           routerConfig: _appRouter.router,
         ),
       ),

@@ -26,7 +26,8 @@ class MovieListScreen extends StatelessWidget {
       body: BlocProvider(
         create: (context) => MovieBloc(
           movieRepository: RepositoryProvider.of<MovieRepository>(context),
-        )..add(FetchMovies()),
+        )..add(
+            FetchMovies()), // Llamar a fetchMovies que manejará la carga desde API o desde la DB
         child: BlocBuilder<MovieBloc, MovieState>(
           builder: (context, state) {
             if (state is MovieLoading) {
@@ -50,7 +51,6 @@ class MovieListScreen extends StatelessWidget {
             } else if (state is MovieError) {
               return Center(child: Text(state.message));
             }
-
             return const EmptyState();
           },
         ),

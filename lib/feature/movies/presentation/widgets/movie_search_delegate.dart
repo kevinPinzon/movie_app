@@ -64,6 +64,7 @@ class MovieSearchDelegate extends SearchDelegate {
           return const Center(child: CircularProgressIndicator());
         } else if (state is MovieLoaded) {
           if (state.movies.isEmpty) {
+            movieBloc.add(FetchMovies());
             return const EmptyState(message: 'No Movies Found');
           }
           final movies = state.movies;
