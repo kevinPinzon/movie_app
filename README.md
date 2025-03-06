@@ -20,7 +20,7 @@ A Flutter project for managing and viewing movies with a clean architecture, eff
 
 | Home Screen | Movie Detail | Profile Screen |
 |-------------|--------------|----------------|
-| <img src="assets/screenshots/1.png" width="200"/> | <img src="assets/screenshots/2.png" width="200"/> | <img src="assets/screenshots/3.png" width="200"/> | <img src="assets/screenshots/4.png" width="200"/> | <img src="assets/screenshots/5.png" width="200"/> |
+| <img src="assets/screenshots/1.png" width="200"/> | <img src="assets/screenshots/2.png" width="200"/> | <img src="assets/screenshots/4.png" width="200"/> |
 
 ## 🛠️ Tech Stack  
 
@@ -46,7 +46,9 @@ flutter pub get
 ```
 
 3. **Set up Firebase:**  
-Follow the Firebase documentation to add Firebase to your Flutter project.
+   - [Download the file `google-services.json` for Android](https://drive.google.com/drive/folders/1p6hk-JtYHvOccdrQkm2U_khtyoOA88MV?usp=sharing) and place it in `android/app/`.
+   - [Download `GoogleService-Info.plist` file for iOS](https://drive.google.com/drive/folders/1p6hk-JtYHvOccdrQkm2U_khtyoOA88MV?usp=sharing) and place it in`ios/Runner/`.
+
 
 4. **Configure Environment Variables:**  
 To manage sensitive information such as API keys and app configurations, create a `.env` file in the root of the project with the necessary keys:
@@ -54,6 +56,8 @@ To manage sensitive information such as API keys and app configurations, create 
 ```env
 AUTH_TOKEN=your_auth_token_here
 ```
+
+   - [Download `.env` file](https://drive.google.com/drive/folders/1p6hk-JtYHvOccdrQkm2U_khtyoOA88MV?usp=sharing) and place it in the root.
 
 5. **Run the app:**  
 ```sh
