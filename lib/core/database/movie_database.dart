@@ -1,4 +1,5 @@
 import 'package:sqflite/sqflite.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 import 'package:movie_app/feature/movies/domain/entities/movie_entity.dart';
 
@@ -63,7 +64,7 @@ class MovieDatabase {
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
         } catch (e) {
-          print('Error inserting movie: $e');
+          throw Exception("Error inserting movie: $e");
         }
       }
     });
