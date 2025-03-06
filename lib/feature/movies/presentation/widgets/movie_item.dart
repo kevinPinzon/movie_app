@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 import 'package:movie_app/core/common/resource_images.dart';
-import 'package:movie_app/core/theme/sizes.dart';
 import 'package:movie_app/feature/movies/domain/entities/movie_entity.dart';
 import 'package:movie_app/core/theme/colors.dart';
 

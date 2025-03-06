@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:movie_app/core/common/resource_images.dart';
-import 'package:movie_app/core/network/network_info.dart';
+import 'package:movie_app/core/services/dependency_injection.dart';
 import 'package:movie_app/feature/movies/domain/repositories/movie_repository.dart';
 import 'package:movie_app/feature/movies/presentation/blocs/movie_bloc.dart';
-import 'package:movie_app/main.dart';
 
 class MovieDetailScreen extends StatelessWidget {
   final int movieId;

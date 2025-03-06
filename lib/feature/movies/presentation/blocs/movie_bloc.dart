@@ -18,6 +18,18 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       : super(MovieInitial()) {
     on<FetchMovies>((event, emit) async {
       emit(MovieLoading());
+
+      final isConnected = await networkInfoRepository.hasConnection;
+      if (!isConnected) {
+        final localMovies = await movieRepository.getMoviesFromLocal();
+        if (localMovies.isNotEmpty) {
+          emit(MovieLoaded(movies: localMovies));
+        } else {
+          emit(MovieError(message: 'No internet and no local data available.'));
+        }
+        return;
+      }
+
       try {
         final movies = await movieRepository.fetchMovies(currentPage);
         if (movies.isNotEmpty) {
@@ -28,12 +40,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
 
         emit(MovieLoaded(movies: movies));
       } catch (e) {
-        final localMovies = await movieRepository.getMoviesFromLocal();
-        if (localMovies.isNotEmpty) {
-          emit(MovieLoaded(movies: localMovies));
-        } else {
-          emit(MovieError(message: 'No movies available.'));
-        }
+        emit(MovieError(message: 'Failed to fetch movies: $e'));
       }
     });
 

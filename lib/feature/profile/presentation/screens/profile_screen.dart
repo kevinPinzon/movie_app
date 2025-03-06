@@ -33,30 +33,33 @@ class ProfileScreen extends StatelessWidget {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 32),
-            ListView(
-              shrinkWrap: true,
-              children: [
-                BlocBuilder<ThemeBloc, ThemeState>(
-                  builder: (context, state) {
-                    return SwitchListTile(
-                      secondary: Icon(
-                        state.isDarkMode ? Icons.dark_mode : Icons.light_mode,
-                      ),
-                      title: const Text('Dark Mode'),
-                      value: state.isDarkMode,
-                      onChanged: (_) =>
-                          context.read<ThemeBloc>().add(ToggleTheme()),
-                    );
-                  },
-                ),
-                const Divider(),
-                const ListTile(
-                  leading: Icon(Icons.info_outline),
-                  title: Text('App Version'),
-                  trailing: Text('1.0.0', style: TextStyle(color: Colors.grey)),
-                ),
-                const Divider(),
-              ],
+            Expanded(
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  BlocBuilder<ThemeBloc, ThemeState>(
+                    builder: (context, state) {
+                      return SwitchListTile(
+                        secondary: Icon(
+                          state.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                        ),
+                        title: const Text('Dark Mode'),
+                        value: state.isDarkMode,
+                        onChanged: (_) =>
+                            context.read<ThemeBloc>().add(ToggleTheme()),
+                      );
+                    },
+                  ),
+                  const Divider(),
+                  const ListTile(
+                    leading: Icon(Icons.info_outline),
+                    title: Text('App Version'),
+                    trailing:
+                        Text('1.0.1', style: TextStyle(color: Colors.grey)),
+                  ),
+                  const Divider(),
+                ],
+              ),
             ),
           ],
         ),

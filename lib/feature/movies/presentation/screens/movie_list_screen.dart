@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:movie_app/core/network/network_info.dart';
+import 'package:movie_app/core/services/dependency_injection.dart';
 import 'package:movie_app/feature/movies/domain/repositories/movie_repository.dart';
 import 'package:movie_app/feature/movies/presentation/blocs/movie_bloc.dart';
 import 'package:movie_app/feature/movies/presentation/widgets/empty_state.dart';
 import 'package:movie_app/feature/movies/presentation/widgets/movie_item.dart';
 import 'package:movie_app/feature/movies/presentation/widgets/movie_search_delegate.dart';
-import 'package:movie_app/main.dart';
 
 class MovieListScreen extends StatelessWidget {
   const MovieListScreen({super.key});
@@ -68,6 +67,13 @@ class MovieListScreen extends StatelessWidget {
                 },
               );
             } else if (state is MovieError) {
+              // Mostrar EmptyState si hay un error debido a la falta de conexión
+              if (state.message == 'No internet and no local data available.') {
+                return const EmptyState(
+                  message:
+                      'No internet and no local data available.\nPlease try again later.',
+                );
+              }
               return Center(child: Text(state.message));
             }
             return const EmptyState();
