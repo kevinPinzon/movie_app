@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:movie_app/core/network/network_info.dart';
 import 'package:movie_app/feature/movies/domain/entities/movie_entity.dart';
 import 'package:movie_app/feature/movies/domain/repositories/movie_repository.dart';
 
@@ -10,8 +11,11 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
   final MovieRepository movieRepository;
   int currentPage = 1;
   bool hasMoreMovies = true;
+  final NetworkInfoRepository networkInfoRepository;
 
-  MovieBloc({required this.movieRepository}) : super(MovieInitial()) {
+  MovieBloc(
+      {required this.movieRepository, required this.networkInfoRepository})
+      : super(MovieInitial()) {
     on<FetchMovies>((event, emit) async {
       emit(MovieLoading());
       try {
@@ -62,10 +66,21 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       emit(MovieLoading());
 
       try {
-        final movie = await movieRepository.fetchMovieDetail(event.movieId);
-        emit(MovieDetailLoaded(movie: movie));
+        final isConnected = await networkInfoRepository.hasConnection;
+        if (isConnected) {
+          final movie = await movieRepository.fetchMovieDetail(event.movieId);
+          emit(MovieDetailLoaded(movie: movie));
+        } else {
+          final movie = await movieRepository.getMovieById(event.movieId);
+          if (movie != null) {
+            emit(MovieDetailLoaded(movie: movie));
+          } else {
+            emit(MovieError(
+                message: 'No internet and no local data available.'));
+          }
+        }
       } catch (e) {
-        emit(MovieError(message: e.toString()));
+        emit(MovieError(message: 'Failed to load movie details.'));
       }
     });
   }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:movie_app/core/common/resource_images.dart';
+import 'package:movie_app/core/network/network_info.dart';
 import 'package:movie_app/feature/movies/domain/repositories/movie_repository.dart';
 import 'package:movie_app/feature/movies/presentation/blocs/movie_bloc.dart';
+import 'package:movie_app/main.dart';
 
 class MovieDetailScreen extends StatelessWidget {
   final int movieId;
@@ -23,6 +26,7 @@ class MovieDetailScreen extends StatelessWidget {
       body: BlocProvider(
         create: (context) => MovieBloc(
           movieRepository: RepositoryProvider.of<MovieRepository>(context),
+          networkInfoRepository: getIt(),
         )..add(FetchMovieDetail(movieId: movieId)),
         child: BlocBuilder<MovieBloc, MovieState>(
           builder: (context, state) {
@@ -41,6 +45,14 @@ class MovieDetailScreen extends StatelessWidget {
                           'https://image.tmdb.org/t/p/w500${movie.posterPath}',
                           height: 400,
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            // En caso de error, mostramos una imagen de error personalizada
+                            return Image.asset(
+                              noPicture, // Ruta de la imagen de error
+                              height: 200,
+                              fit: BoxFit.fitWidth,
+                            );
+                          },
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -68,7 +80,9 @@ class MovieDetailScreen extends StatelessWidget {
                 ),
               );
             } else if (state is MovieError) {
-              return Center(child: Text(state.message));
+              return Center(
+                  child: Text(state
+                      .message)); // Mostrar el mensaje de error si hay fallo
             }
             return const Center(child: Text('No data available'));
           },

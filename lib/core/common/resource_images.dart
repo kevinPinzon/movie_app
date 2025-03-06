@@ -5,3 +5,4 @@ const logo = 'assets/images/paw_print.png';
 const welcome = 'assets/images/welcome.svg';
 const flutterLogo = 'assets/images/flutter.svg';
 const flutterletter = 'assets/images/flutterletter.svg';
+const noPicture = 'assets/images/no-pictures.png';

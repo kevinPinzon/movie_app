@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:movie_app/core/network/network_info.dart';
 import 'package:movie_app/core/routes/navigation.dart';
 import 'package:movie_app/core/services/theme_storage_service.dart';
 import 'package:movie_app/core/theme/theme.dart';
@@ -31,17 +32,23 @@ Future<void> main() async {
   await movieDatabase.init();
 
   final themeStorageService = await ThemeStorageService.init();
+  final networkInfoRepository = NetworkInfoRepositoryImpl();
 
   getIt
     ..registerLazySingleton(() => ThemeBloc(themeStorageService))
     ..registerLazySingleton(() => http.Client())
     ..registerLazySingleton<ServerApiClient>(() => ServerApiClient())
     ..registerLazySingleton<MovieDatabase>(() => MovieDatabase())
+    ..registerLazySingleton<NetworkInfoRepository>(() => networkInfoRepository)
     ..registerLazySingleton<MovieRepository>(() => MovieRepositoryImpl(
           serverApiClient: getIt(),
           movieDatabase: getIt(),
+          networkInfoRepository: getIt(),
         ))
-    ..registerFactory(() => MovieBloc(movieRepository: getIt()));
+    ..registerFactory(() => MovieBloc(
+          movieRepository: getIt(),
+          networkInfoRepository: getIt(),
+        ));
 
   runApp(App());
 }
@@ -57,10 +64,8 @@ class App extends StatelessWidget {
       create: (context) => getIt<ThemeBloc>(),
       child: RepositoryProvider<MovieRepository>(
         create: (context) => getIt<MovieRepository>(),
-        child: BlocProvider(
-          create: (context) => MovieBloc(
-            movieRepository: RepositoryProvider.of<MovieRepository>(context),
-          ),
+        child: BlocProvider<MovieBloc>(
+          create: (context) => getIt<MovieBloc>(),
           child: BlocBuilder<ThemeBloc, ThemeState>(
             builder: (context, state) {
               return MaterialApp.router(

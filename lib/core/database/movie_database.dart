@@ -79,4 +79,22 @@ class MovieDatabase {
       throw Exception("Failed to fetch movies: $e");
     }
   }
+
+  Future<MovieEntity?> getMovieById(int movieId) async {
+    final dbClient = await db;
+
+    try {
+      final result = await dbClient.query(
+        'movies',
+        where: 'id = ?',
+        whereArgs: [movieId],
+      );
+      if (result.isNotEmpty) {
+        return MovieEntity.fromMap(result.first);
+      }
+      return null;
+    } catch (e) {
+      throw Exception("Failed to fetch movie by id: $e");
+    }
+  }
 }

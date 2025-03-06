@@ -6,4 +6,5 @@ abstract class MovieRepository {
   Future<void> saveMovies(List<MovieEntity> movies);
   Future<List<MovieEntity>> getMoviesFromLocal();
   Future<MovieEntity> fetchMovieDetail(int movieId);
+  Future<MovieEntity?> getMovieById(int movieId);
 }
