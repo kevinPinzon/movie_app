@@ -14,7 +14,12 @@ class MovieListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Movie List'),
+        title: Text(
+          'Movie List',
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -22,13 +27,18 @@ class MovieListScreen extends StatelessWidget {
               showSearch(context: context, delegate: MovieSearchDelegate());
             },
           ),
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () {
+              context.go('/movieList/profile');
+            },
+          ),
         ],
       ),
       body: BlocProvider(
         create: (context) => MovieBloc(
           movieRepository: RepositoryProvider.of<MovieRepository>(context),
-        )..add(
-            FetchMovies()), // Llamar a fetchMovies que manejará la carga desde API o desde la DB
+        )..add(FetchMovies()),
         child: BlocBuilder<MovieBloc, MovieState>(
           builder: (context, state) {
             if (state is MovieLoading) {
