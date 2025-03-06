@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:movie_app/feature/init/presentation/screens/welcome_screen.dart';
 import 'package:movie_app/feature/movies/presentation/screens/movie_detail_screen.dart';
 import 'package:movie_app/feature/movies/presentation/screens/movie_list_screen.dart';
-import 'package:movie_app/feature/profile/presentation/profile_screen.dart';
+import 'package:movie_app/feature/profile/presentation/screens/profile_screen.dart';
 
 class AppRouter {
   AppRouter();
