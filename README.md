@@ -36,7 +36,7 @@ A Flutter project for managing and viewing movies with a clean architecture, eff
 
 1. **Clone the repository:**  
 ```sh
-git clone https://github.com/yourusername/movie_app
+git clone https://github.com/kevinPinzon/movie_app
 cd movie_app
 ```
 
@@ -138,5 +138,16 @@ lib/
 - **app_router.dart**: Defines the routing logic with Go Router.
 - **theme_bloc.dart**: Manages the app's theme state (light/dark mode).
 - **movie_repository.dart**: Provides methods to fetch movies either from a remote server or locally.
+
+---
+
+## Download the app
+
+Both the **iOS** and **Android** versions of the app have been uploaded to Firebase App Distribution. You can download and install the app by joining the distribution using the following links:
+
+- **[Download Android App](https://appdistribution.firebase.dev/iOS-Link)**
+- **[Download iOS App](https://appdistribution.firebase.dev/Android-Link)**
+
+Simply click on the respective link to join the app distribution and install the app directly on your device.
 
 ---
