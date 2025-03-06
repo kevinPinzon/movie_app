@@ -16,7 +16,7 @@ void main() async {
   await initFirebase();
 
   // Inicializar dependencias
-  initDependencies();
+  await initDependencies();
 
   runApp(App());
 }

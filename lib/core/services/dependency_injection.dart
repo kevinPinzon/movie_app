@@ -12,11 +12,14 @@ import 'package:movie_app/feature/theme/presentation/bloc/theme_bloc.dart';
 final GetIt getIt = GetIt.instance;
 
 Future<void> initDependencies() async {
+  final movieDatabase = MovieDatabase();
+  await movieDatabase.init();
+
   final themeStorageService = await ThemeStorageService.init();
   final networkInfoRepository = NetworkInfoRepositoryImpl();
 
   getIt
-    ..registerLazySingleton(() => ThemeBloc(themeStorageService))
+    ..registerLazySingleton(() => themeStorageService)
     ..registerLazySingleton(() => http.Client())
     ..registerLazySingleton<ServerApiClient>(() => ServerApiClient())
     ..registerLazySingleton<MovieDatabase>(() => MovieDatabase())
@@ -29,5 +32,6 @@ Future<void> initDependencies() async {
     ..registerFactory(() => MovieBloc(
           movieRepository: getIt(),
           networkInfoRepository: getIt(),
-        ));
+        ))
+    ..registerFactory(() => ThemeBloc(getIt()));
 }
