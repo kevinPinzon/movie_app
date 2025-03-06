@@ -111,7 +111,7 @@ void main() async {
 
 ---
 
-## Project Structure
+## 📌 Project Structure
 
 The project follows a modular architecture with the following structure:
 
@@ -141,12 +141,12 @@ lib/
 
 ---
 
-## Download the app
+## 🚀 Download the app
 
 Both the **iOS** and **Android** versions of the app have been uploaded to Firebase App Distribution. You can download and install the app by joining the distribution using the following links:
 
-- **[Download Android App](https://appdistribution.firebase.dev/iOS-Link)**
-- **[Download iOS App](https://appdistribution.firebase.dev/Android-Link)**
+- **[Download Android App](https://appdistribution.firebase.google.com/testerapps/1:1023384798474:android:79491b07089ae5e5eda6f3/releases/1k5q3baflngeo?utm_source=firebase-console)**
+- **[Download iOS App](https://appdistribution.firebase.google.com/testerapps/1:1023384798474:ios:3a6856b3c7a630fdeda6f3/releases/2230ovk52l48o?utm_source=firebase-console)**
 
 Simply click on the respective link to join the app distribution and install the app directly on your device.
 
