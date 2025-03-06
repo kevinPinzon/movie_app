@@ -25,4 +25,15 @@ class MovieModel {
       voteAverage: json['vote_average'].toDouble(),
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'overview': overview,
+      'releaseDate': releaseDate,
+      'posterPath': posterPath,
+      'voteAverage': voteAverage,
+    };
+  }
 }

@@ -91,6 +91,8 @@ class MovieItem extends StatelessWidget {
   }
 
   Widget _buildVoteAverageRow(BuildContext context, double voteAverage) {
+    final formattedVoteAverage = NumberFormat('0.0').format(voteAverage);
+
     return Row(
       children: [
         const Icon(
@@ -100,7 +102,7 @@ class MovieItem extends StatelessWidget {
         ),
         const SizedBox(width: 4),
         Text(
-          voteAverage.toString(),
+          formattedVoteAverage,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: AppColors.grayLight,
                 fontSize: smallTextSize,

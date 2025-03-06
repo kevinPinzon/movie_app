@@ -48,6 +48,7 @@ class MovieRepositoryImpl implements MovieRepository {
                 releaseDate: movieJson['release_date'],
                 posterPath: movieJson['poster_path'],
                 voteAverage: movieJson['vote_average'].toDouble(),
+                genres: [],
               ))
           .toList();
 
@@ -76,5 +77,36 @@ class MovieRepositoryImpl implements MovieRepository {
   Future<List<MovieEntity>> getMoviesFromLocal() async {
     await initializeDatabase();
     return await movieDatabase.getMovies();
+  }
+
+  @override
+  Future<MovieEntity> fetchMovieDetail(int movieId) async {
+    final path = '/3/movie/$movieId';
+
+    try {
+      final authToken = dotenv.env['AUTH_TOKEN'] ?? '';
+      final headers = <String, String>{
+        'accept': 'application/json',
+      };
+      headers['Authorization'] = 'Bearer $authToken';
+      final response = await serverApiClient.get(path, headers: headers);
+      final data = json.decode(response.body);
+
+      final genres = List<String>.from(data['genres'].map((e) => e['name']));
+
+      final movie = MovieEntity(
+        id: data['id'],
+        title: data['title'],
+        overview: data['overview'],
+        releaseDate: data['release_date'],
+        posterPath: data['poster_path'],
+        voteAverage: data['vote_average'].toDouble(),
+        genres: genres,
+      );
+
+      return movie;
+    } catch (e) {
+      throw Exception("Failed to load movie detail");
+    }
   }
 }

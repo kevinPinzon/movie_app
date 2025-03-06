@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:movie_app/feature/movies/presentation/blocs/movie_bloc.dart';
 import 'package:movie_app/feature/movies/presentation/widgets/empty_state.dart';
 import 'package:movie_app/feature/movies/presentation/widgets/movie_item.dart';
@@ -42,7 +43,13 @@ class MovieSearchDelegate extends SearchDelegate {
           return ListView.builder(
             itemCount: movies.length,
             itemBuilder: (context, index) {
-              return MovieItem(movie: movies[index]);
+              final movie = state.movies[index];
+              return GestureDetector(
+                onTap: () {
+                  context.go('/movieList/movieDetail/${movie.id}');
+                },
+                child: MovieItem(movie: movie),
+              );
             },
           );
         } else if (state is MovieError) {
@@ -71,7 +78,13 @@ class MovieSearchDelegate extends SearchDelegate {
           return ListView.builder(
             itemCount: movies.length,
             itemBuilder: (context, index) {
-              return MovieItem(movie: movies[index]);
+              final movie = state.movies[index];
+              return GestureDetector(
+                onTap: () {
+                  context.go('/movieList/movieDetail/${movie.id}');
+                },
+                child: MovieItem(movie: movie),
+              );
             },
           );
         } else if (state is MovieError) {

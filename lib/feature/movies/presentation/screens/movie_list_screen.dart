@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:movie_app/feature/movies/domain/repositories/movie_repository.dart';
 import 'package:movie_app/feature/movies/presentation/blocs/movie_bloc.dart';
 import 'package:movie_app/feature/movies/presentation/widgets/empty_state.dart';
@@ -44,7 +45,12 @@ class MovieListScreen extends StatelessWidget {
                     );
                   } else {
                     final movie = state.movies[index];
-                    return MovieItem(movie: movie);
+                    return GestureDetector(
+                      onTap: () {
+                        context.go('/movieList/movieDetail/${movie.id}');
+                      },
+                      child: MovieItem(movie: movie),
+                    );
                   }
                 },
               );

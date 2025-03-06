@@ -5,6 +5,7 @@ class MovieEntity {
   final String releaseDate;
   final String posterPath;
   final double voteAverage;
+  final List<String> genres;
 
   MovieEntity({
     required this.id,
@@ -13,6 +14,7 @@ class MovieEntity {
     required this.releaseDate,
     required this.posterPath,
     required this.voteAverage,
+    required this.genres,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +25,7 @@ class MovieEntity {
       'releaseDate': releaseDate,
       'posterPath': posterPath,
       'voteAverage': voteAverage,
+      'genres': genres.join(','),
     };
   }
 
@@ -34,6 +37,9 @@ class MovieEntity {
       releaseDate: map['releaseDate'],
       posterPath: map['posterPath'],
       voteAverage: map['voteAverage'],
+      genres: map['genres'] != null
+          ? List<String>.from(map['genres'].split(','))
+          : [],
     );
   }
 }

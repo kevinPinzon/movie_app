@@ -26,3 +26,12 @@ class MovieError extends MovieState {
   @override
   List<Object?> get props => [message];
 }
+
+class MovieDetailLoaded extends MovieState {
+  final MovieEntity movie;
+
+  MovieDetailLoaded({required this.movie});
+
+  @override
+  List<Object> get props => [movie];
+}

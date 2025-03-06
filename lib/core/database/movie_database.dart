@@ -15,7 +15,7 @@ class MovieDatabase {
       final path = join(dbPath, _dbName);
       _db = await openDatabase(
         path,
-        version: 1,
+        version: 2,
         onCreate: (db, version) {
           return db.execute(
             '''
@@ -25,10 +25,17 @@ class MovieDatabase {
               overview TEXT,
               releaseDate TEXT,
               posterPath TEXT,
-              voteAverage REAL
+              voteAverage REAL,
+              genres TEXT
+
             )
             ''',
           );
+        },
+        onUpgrade: (db, oldVersion, newVersion) async {
+          if (oldVersion < 2) {
+            await db.execute('ALTER TABLE movies ADD COLUMN genres TEXT');
+          }
         },
       );
       _isDbInitialized = true;
