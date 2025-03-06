@@ -13,7 +13,12 @@ class MovieDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Movie Details'),
+        title: Text(
+          'Movie Details',
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+        ),
       ),
       body: BlocProvider(
         create: (context) => MovieBloc(
@@ -39,15 +44,25 @@ class MovieDetailScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      Text(movie.title,
-                          style: Theme.of(context).textTheme.headlineMedium),
-                      const SizedBox(height: 10),
-                      Text("Genres: ${movie.genres.join(', ')}"),
+                      Text(
+                        movie.title,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
                       const SizedBox(height: 10),
                       Text(
-                          "Release Date: ${_formatReleaseDate(movie.releaseDate)}"),
+                        "Genres: ${movie.genres.join(', ')}",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
                       const SizedBox(height: 10),
-                      Text(movie.overview),
+                      Text(
+                        "Release Date: ${_formatReleaseDate(movie.releaseDate)}",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        movie.overview,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
                     ],
                   ),
                 ),

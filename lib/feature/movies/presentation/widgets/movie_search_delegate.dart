@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:movie_app/feature/movies/presentation/blocs/movie_bloc.dart';
 import 'package:movie_app/feature/movies/presentation/widgets/empty_state.dart';
 import 'package:movie_app/feature/movies/presentation/widgets/movie_item.dart';
-import 'package:movie_app/core/theme/colors.dart';
 
 class MovieSearchDelegate extends SearchDelegate {
   @override
@@ -13,18 +12,20 @@ class MovieSearchDelegate extends SearchDelegate {
   @override
   TextInputType get keyboardType => TextInputType.text;
 
-  @override
-  InputDecorationTheme? get searchFieldDecorationTheme => InputDecorationTheme(
-        filled: true,
-        fillColor: AppColors.grayDark,
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide.none,
-        ),
-        hintStyle: const TextStyle(color: AppColors.grayLight),
-      );
+  InputDecorationTheme? getSearchFieldDecorationTheme(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    return InputDecorationTheme(
+      filled: true,
+      fillColor: isDarkMode ? Colors.grey[800] : Colors.grey[200],
+      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide.none,
+      ),
+      hintStyle: TextStyle(color: isDarkMode ? Colors.white70 : Colors.black45),
+    );
+  }
 
   @override
   Widget buildSuggestions(BuildContext context) {

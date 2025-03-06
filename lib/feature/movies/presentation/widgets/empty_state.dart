@@ -4,10 +4,7 @@ import 'package:movie_app/core/theme/colors.dart';
 class EmptyState extends StatelessWidget {
   final String message;
 
-  const EmptyState({
-    super.key,
-    this.message = 'No results found',
-  });
+  const EmptyState({super.key, this.message = 'No results found'});
 
   @override
   Widget build(BuildContext context) {

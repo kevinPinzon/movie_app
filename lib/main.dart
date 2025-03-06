@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:movie_app/core/routes/navigation.dart';
+import 'package:movie_app/core/services/theme_storage_service.dart';
 import 'package:movie_app/core/theme/theme.dart';
 import 'package:movie_app/feature/movies/data/repositories/movie_repository.dart';
 import 'package:movie_app/feature/movies/domain/repositories/movie_repository.dart';
@@ -11,6 +12,10 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:movie_app/core/database/movie_database.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:movie_app/feature/theme/presentation/bloc/theme_bloc.dart';
+import 'firebase_options.dart';
+
 final GetIt getIt = GetIt.instance;
 
 Future<void> main() async {
@@ -18,10 +23,17 @@ Future<void> main() async {
 
   await dotenv.load(fileName: "assets/.env");
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   final movieDatabase = MovieDatabase();
   await movieDatabase.init();
 
+  final themeStorageService = await ThemeStorageService.init();
+
   getIt
+    ..registerLazySingleton(() => ThemeBloc(themeStorageService))
     ..registerLazySingleton(() => http.Client())
     ..registerLazySingleton<ServerApiClient>(() => ServerApiClient())
     ..registerLazySingleton<MovieDatabase>(() => MovieDatabase())
@@ -41,16 +53,25 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider<MovieRepository>(
-      create: (context) => getIt<MovieRepository>(),
-      child: BlocProvider(
-        create: (context) => MovieBloc(
-          movieRepository: RepositoryProvider.of<MovieRepository>(context),
-        ),
-        child: MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.themeData(),
-          routerConfig: _appRouter.router,
+    return BlocProvider<ThemeBloc>(
+      create: (context) => getIt<ThemeBloc>(),
+      child: RepositoryProvider<MovieRepository>(
+        create: (context) => getIt<MovieRepository>(),
+        child: BlocProvider(
+          create: (context) => MovieBloc(
+            movieRepository: RepositoryProvider.of<MovieRepository>(context),
+          ),
+          child: BlocBuilder<ThemeBloc, ThemeState>(
+            builder: (context, state) {
+              return MaterialApp.router(
+                debugShowCheckedModeBanner: false,
+                themeMode: state.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                routerConfig: _appRouter.router,
+              );
+            },
+          ),
         ),
       ),
     );

@@ -8,7 +8,7 @@ class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
   Future<void> processScreen(BuildContext context) async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 2));
 
     if (context.mounted) {
       context.go('/movieList');
@@ -29,12 +29,12 @@ class WelcomeScreen extends StatelessWidget {
               fit: BoxFit.contain,
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Loading...',
-              style: TextStyle(
-                fontSize: bigTextSize,
-                fontWeight: FontWeight.bold,
-              ),
+            Text(
+              'Movie App',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
+                  ),
             ),
           ],
         ),

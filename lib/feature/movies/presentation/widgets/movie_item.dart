@@ -20,7 +20,7 @@ class MovieItem extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      color: AppColors.grayDark,
+      color: Theme.of(context).cardColor, // Usando color del tema
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
@@ -71,7 +71,7 @@ class MovieItem extends StatelessWidget {
       title,
       style: Theme.of(context).textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppColors.white,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
@@ -81,12 +81,7 @@ class MovieItem extends StatelessWidget {
   Widget _buildReleaseDateText(BuildContext context, String formattedDate) {
     return Text(
       'Release Date: $formattedDate',
-      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: AppColors.grayLight,
-            fontSize: smallTextSize,
-          ),
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
+      style: Theme.of(context).textTheme.bodyMedium,
     );
   }
 
@@ -103,10 +98,7 @@ class MovieItem extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           formattedVoteAverage,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.grayLight,
-                fontSize: smallTextSize,
-              ),
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ],
     );
@@ -115,12 +107,7 @@ class MovieItem extends StatelessWidget {
   Widget _buildOverviewText(BuildContext context, String overview) {
     return Text(
       overview,
-      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: AppColors.grayLight,
-            fontSize: smallTextSize,
-          ),
-      maxLines: 2,
-      overflow: TextOverflow.ellipsis,
+      style: Theme.of(context).textTheme.bodyMedium,
     );
   }
 }
