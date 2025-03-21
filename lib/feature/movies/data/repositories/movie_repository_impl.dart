@@ -1,53 +1,78 @@
+import 'package:movie_app/core/network/network_info.dart';
 import 'package:movie_app/core/services/movie_local_service.dart';
 import 'package:movie_app/core/services/movie_remote_service.dart';
 import 'package:movie_app/feature/movies/domain/repositories/movie_repository.dart';
 import 'package:movie_app/feature/movies/domain/entities/movie_entity.dart';
 
 class MovieRepositoryImpl implements MovieRepository {
-  final MovieLocalService movieLocalService;
   final MovieRemoteService movieRemoteService;
+  final MovieLocalService movieLocalService;
+  final NetworkInfoRepository networkInfoRepository;
 
   MovieRepositoryImpl({
-    required this.movieLocalService,
     required this.movieRemoteService,
+    required this.movieLocalService,
+    required this.networkInfoRepository,
   });
 
   @override
   Future<List<MovieEntity>> fetchMovies(int page) async {
     try {
-      // Primero intentamos obtener las películas desde la API remota
-      final movies = await movieRemoteService.fetchMovies(page);
-      // Guardamos las películas en la base de datos local
-      await movieLocalService.saveMovies(movies);
-      return movies;
+      final isConnected = await networkInfoRepository.hasConnection;
+
+      if (isConnected) {
+        final movies = await movieRemoteService.fetchMovies(page);
+        await movieLocalService.saveMovies(movies);
+        return movies;
+      } else {
+        return await movieLocalService.getMoviesFromLocal();
+      }
     } catch (e) {
-      // Si la API falla, obtenemos las películas desde la base de datos local
-      return await movieLocalService.getMoviesFromLocal();
+      throw Exception("Failed to fetch movies: $e");
     }
   }
 
   @override
   Future<MovieEntity> fetchMovieDetail(int movieId) async {
     try {
-      // Intentamos obtener los detalles desde la API remota
-      return await movieRemoteService.fetchMovieDetail(movieId);
-    } catch (e) {
-      // Si la API falla, obtenemos los detalles desde la base de datos local
-      final movie = await movieLocalService.getMovieById(movieId);
-      if (movie != null) {
-        return movie;
+      final isConnected = await networkInfoRepository.hasConnection;
+
+      if (isConnected) {
+        return await movieRemoteService.fetchMovieDetail(movieId);
       } else {
-        throw Exception("Failed to load movie detail from local storage");
+        final movie = await movieLocalService.getMovieById(movieId);
+        if (movie != null) {
+          return movie;
+        } else {
+          throw Exception("Movie not found locally");
+        }
       }
+    } catch (e) {
+      throw Exception("Failed to fetch movie detail: $e");
     }
   }
 
   @override
   Future<List<MovieEntity>> searchMoviesByTitle(String query) async {
-    final movies = await movieLocalService.getMoviesFromLocal();
-    return movies.where((movie) {
-      return movie.title.toLowerCase().contains(query.toLowerCase());
-    }).toList();
+    try {
+      final isConnected = await networkInfoRepository.hasConnection;
+
+      if (isConnected) {
+        final movies = await movieRemoteService.fetchMovies(1);
+        return movies
+            .where((movie) =>
+                movie.title.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      } else {
+        final movies = await movieLocalService.getMoviesFromLocal();
+        return movies
+            .where((movie) =>
+                movie.title.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+    } catch (e) {
+      throw Exception("Failed to search movies: $e");
+    }
   }
 
   @override

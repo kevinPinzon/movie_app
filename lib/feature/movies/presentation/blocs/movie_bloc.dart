@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:movie_app/core/network/network_info.dart';
 import 'package:movie_app/feature/movies/domain/entities/movie_entity.dart';
 import 'package:movie_app/feature/movies/domain/repositories/movie_repository.dart';
 
@@ -9,29 +8,17 @@ part 'movie_state.dart';
 
 class MovieBloc extends Bloc<MovieEvent, MovieState> {
   final MovieRepository movieRepository;
+
   int currentPage = 1;
   bool hasMoreMovies = true;
-  final NetworkInfoRepository networkInfoRepository;
 
-  MovieBloc(
-      {required this.movieRepository, required this.networkInfoRepository})
-      : super(MovieInitial()) {
+  MovieBloc({required this.movieRepository}) : super(MovieInitial()) {
     on<FetchMovies>((event, emit) async {
       emit(MovieLoading());
 
-      final isConnected = await networkInfoRepository.hasConnection;
-      if (!isConnected) {
-        final localMovies = await movieRepository.getMoviesFromLocal();
-        if (localMovies.isNotEmpty) {
-          emit(MovieLoaded(movies: localMovies));
-        } else {
-          emit(MovieError(message: 'No internet and no local data available.'));
-        }
-        return;
-      }
-
       try {
         final movies = await movieRepository.fetchMovies(currentPage);
+
         if (movies.isNotEmpty) {
           currentPage++;
         } else {
@@ -64,28 +51,21 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     });
 
     on<SearchMovies>((event, emit) async {
-      final filteredMovies =
-          await movieRepository.searchMoviesByTitle(event.query);
-      emit(MovieLoaded(movies: filteredMovies));
+      try {
+        final filteredMovies =
+            await movieRepository.searchMoviesByTitle(event.query);
+        emit(MovieLoaded(movies: filteredMovies));
+      } catch (e) {
+        emit(MovieError(message: 'Failed to search movies: $e'));
+      }
     });
 
     on<FetchMovieDetail>((event, emit) async {
       emit(MovieLoading());
 
       try {
-        final isConnected = await networkInfoRepository.hasConnection;
-        if (isConnected) {
-          final movie = await movieRepository.fetchMovieDetail(event.movieId);
-          emit(MovieDetailLoaded(movie: movie));
-        } else {
-          final movie = await movieRepository.getMovieById(event.movieId);
-          if (movie != null) {
-            emit(MovieDetailLoaded(movie: movie));
-          } else {
-            emit(MovieError(
-                message: 'No internet and no local data available.'));
-          }
-        }
+        final movie = await movieRepository.fetchMovieDetail(event.movieId);
+        emit(MovieDetailLoaded(movie: movie));
       } catch (e) {
         emit(MovieError(message: 'Failed to load movie details.'));
       }

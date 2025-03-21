@@ -39,7 +39,6 @@ class MovieListScreen extends StatelessWidget {
       body: BlocProvider(
         create: (context) => MovieBloc(
           movieRepository: RepositoryProvider.of<MovieRepository>(context),
-          networkInfoRepository: getIt(),
         )..add(FetchMovies()),
         child: BlocBuilder<MovieBloc, MovieState>(
           builder: (context, state) {
