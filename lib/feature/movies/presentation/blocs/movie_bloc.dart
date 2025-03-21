@@ -1,23 +1,30 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:get_it/get_it.dart';
 import 'package:movie_app/feature/movies/domain/entities/movie_entity.dart';
-import 'package:movie_app/feature/movies/domain/repositories/movie_repository.dart';
-
+import 'package:movie_app/feature/movies/domain/use_cases/movies_use_cases.dart';
 part 'movie_event.dart';
 part 'movie_state.dart';
 
 class MovieBloc extends Bloc<MovieEvent, MovieState> {
-  final MovieRepository movieRepository;
+  final FetchMoviesUseCase fetchMoviesUseCase =
+      GetIt.instance<FetchMoviesUseCase>();
+  final FetchMovieDetailUseCase fetchMovieDetailUseCase =
+      GetIt.instance<FetchMovieDetailUseCase>();
+  final LoadMoreMoviesUseCase loadMoreMoviesUseCase =
+      GetIt.instance<LoadMoreMoviesUseCase>();
+  final SearchMoviesUseCase searchMoviesUseCase =
+      GetIt.instance<SearchMoviesUseCase>();
 
   int currentPage = 1;
   bool hasMoreMovies = true;
 
-  MovieBloc({required this.movieRepository}) : super(MovieInitial()) {
+  MovieBloc() : super(MovieInitial()) {
     on<FetchMovies>((event, emit) async {
       emit(MovieLoading());
 
       try {
-        final movies = await movieRepository.fetchMovies(currentPage);
+        final movies = await fetchMoviesUseCase.execute(currentPage);
 
         if (movies.isNotEmpty) {
           currentPage++;
@@ -35,7 +42,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       if (hasMoreMovies) {
         try {
           final currentMovies = (state as MovieLoaded).movies;
-          final moreMovies = await movieRepository.fetchMovies(currentPage);
+          final moreMovies = await loadMoreMoviesUseCase.execute(currentPage);
 
           if (moreMovies.isNotEmpty) {
             currentPage++;
@@ -52,8 +59,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
 
     on<SearchMovies>((event, emit) async {
       try {
-        final filteredMovies =
-            await movieRepository.searchMoviesByTitle(event.query);
+        final filteredMovies = await searchMoviesUseCase.execute(event.query);
         emit(MovieLoaded(movies: filteredMovies));
       } catch (e) {
         emit(MovieError(message: 'Failed to search movies: $e'));
@@ -64,7 +70,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       emit(MovieLoading());
 
       try {
-        final movie = await movieRepository.fetchMovieDetail(event.movieId);
+        final movie = await fetchMovieDetailUseCase.execute(event.movieId);
         emit(MovieDetailLoaded(movie: movie));
       } catch (e) {
         emit(MovieError(message: 'Failed to load movie details.'));

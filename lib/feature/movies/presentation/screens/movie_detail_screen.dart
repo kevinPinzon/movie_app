@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:movie_app/core/common/resource_images.dart';
-import 'package:movie_app/feature/movies/domain/repositories/movie_repository.dart';
 import 'package:movie_app/feature/movies/presentation/blocs/movie_bloc.dart';
 
 class MovieDetailScreen extends StatelessWidget {
@@ -12,6 +12,8 @@ class MovieDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final movieBloc = GetIt.instance<MovieBloc>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -22,9 +24,7 @@ class MovieDetailScreen extends StatelessWidget {
         ),
       ),
       body: BlocProvider(
-        create: (context) => MovieBloc(
-          movieRepository: RepositoryProvider.of<MovieRepository>(context),
-        )..add(FetchMovieDetail(movieId: movieId)),
+        create: (context) => movieBloc..add(FetchMovieDetail(movieId: movieId)),
         child: BlocBuilder<MovieBloc, MovieState>(
           builder: (context, state) {
             if (state is MovieLoading) {

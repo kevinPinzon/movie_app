@@ -8,6 +8,10 @@ import 'package:movie_app/core/services/movie/movie_remote_service.dart';
 import 'package:movie_app/core/services/movie/movie_local_service.dart';
 import 'package:movie_app/feature/movies/data/repositories/movie_repository_impl.dart';
 import 'package:movie_app/feature/movies/domain/repositories/movie_repository.dart';
+import 'package:movie_app/feature/movies/domain/use_cases/fetch_movie_detail_use_case.dart';
+import 'package:movie_app/feature/movies/domain/use_cases/fetch_movies_use_case.dart';
+import 'package:movie_app/feature/movies/domain/use_cases/load_more_movies_use_case.dart';
+import 'package:movie_app/feature/movies/domain/use_cases/search_movies_use_case.dart';
 import 'package:movie_app/feature/movies/presentation/blocs/movie_bloc.dart';
 import 'package:movie_app/feature/theme/presentation/bloc/theme_bloc.dart';
 
@@ -38,8 +42,12 @@ Future<void> initDependencies() async {
           movieRemoteService: getIt(),
           networkInfoRepository: getIt(),
         ))
-    ..registerFactory(() => MovieBloc(
-          movieRepository: getIt(),
-        ))
+    ..registerLazySingleton(() => FetchMoviesUseCase(movieRepository: getIt()))
+    ..registerLazySingleton(
+        () => FetchMovieDetailUseCase(movieRepository: getIt()))
+    ..registerLazySingleton(
+        () => LoadMoreMoviesUseCase(movieRepository: getIt()))
+    ..registerLazySingleton(() => SearchMoviesUseCase(movieRepository: getIt()))
+    ..registerFactory(() => MovieBloc())
     ..registerFactory(() => ThemeBloc(getIt()));
 }
