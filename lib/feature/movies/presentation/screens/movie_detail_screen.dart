@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:movie_app/core/common/resource_images.dart';
-import 'package:movie_app/core/services/dependency_injection.dart';
 import 'package:movie_app/feature/movies/domain/repositories/movie_repository.dart';
 import 'package:movie_app/feature/movies/presentation/blocs/movie_bloc.dart';
 
@@ -44,9 +43,8 @@ class MovieDetailScreen extends StatelessWidget {
                           height: 400,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
-                            // En caso de error, mostramos una imagen de error personalizada
                             return Image.asset(
-                              noPicture, // Ruta de la imagen de error
+                              noPicture,
                               height: 200,
                               fit: BoxFit.fitWidth,
                             );

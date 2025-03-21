@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/core/routes/navigation.dart';
 import 'package:movie_app/core/services/dependency_injection.dart';
-import 'package:movie_app/core/services/firebase_service.dart';
+import 'package:movie_app/core/services/firebase/firebase_service.dart';
 import 'package:movie_app/core/theme/theme.dart';
 import 'package:movie_app/feature/movies/domain/repositories/movie_repository.dart';
 import 'package:movie_app/feature/movies/presentation/blocs/movie_bloc.dart';

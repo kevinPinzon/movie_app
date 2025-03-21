@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:movie_app/feature/movies/domain/entities/movie_entity.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:movie_app/core/network/server_api_client.dart';
+import 'package:movie_app/core/services/network/server_api_client.dart';
 
 class MovieRemoteService {
   final ServerApiClient serverApiClient;

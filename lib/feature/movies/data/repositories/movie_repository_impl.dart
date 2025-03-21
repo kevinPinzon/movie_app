@@ -1,6 +1,6 @@
-import 'package:movie_app/core/network/network_info.dart';
-import 'package:movie_app/core/services/movie_local_service.dart';
-import 'package:movie_app/core/services/movie_remote_service.dart';
+import 'package:movie_app/core/services/network/network_info.dart';
+import 'package:movie_app/core/services/movie/movie_local_service.dart';
+import 'package:movie_app/core/services/movie/movie_remote_service.dart';
 import 'package:movie_app/feature/movies/domain/repositories/movie_repository.dart';
 import 'package:movie_app/feature/movies/domain/entities/movie_entity.dart';
 

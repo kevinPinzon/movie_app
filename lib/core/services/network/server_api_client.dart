@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:movie_app/core/network/server_info.dart';
+import 'package:movie_app/core/services/network/server_info.dart';
 
 class ServerApiClient {
   ServerApiClient();
